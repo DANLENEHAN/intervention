@@ -55,42 +55,43 @@ class NameForm extends React.Component<User, User>
     });
   }
 
-  handleSumbit() {
-    this.checkFormValidity();
+  checkFormValidityAndSubmit() {
+    let emailValid: boolean = false;
+    let passwordValid: boolean = false;
+
+    if (this.state.email.indexOf("@") === -1) {
+      emailValid = false;
+    } else {
+      emailValid = true;
+    }
+
+    if (this.state.password.length < 15) {
+      passwordValid = false;
+    } else {
+      passwordValid = true;
+    }
+    this.setState(
+      {
+        emailValid: emailValid,
+        passwordValid: passwordValid,
+      },
+      () => this.postAccountCreation()
+    );
+  }
+
+  postAccountCreation() {
     if (
       this.state.emailValid &&
       this.state.passwordValid
     ) {
-        // Simple POST request with a JSON body using fetch
+      // Simple POST request with a JSON body using fetch
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state)
-        };
-        fetch('http://192.168.1.101:5000', requestOptions)
-            .then((response) => console.log(response.json()))
-      }
-  }
-
-  checkFormValidity() {
-    if (this.state.email.indexOf("@") === -1) {
-      this.setState({
-        emailValid: false
-      });
-    } else {
-      this.setState({
-        emailValid: true
-      });
-    }
-
-    if (this.state.password.length < 15) {
-      this.setState({
-        passwordValid: false
-      });
-    } else {
-      this.setState({
-        passwordValid: true
-      });
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.state)
+      };
+      fetch('http://192.168.1.101:5000', requestOptions)
+          .then((response) => console.log(response.json()));
     }
   }
 
@@ -101,7 +102,7 @@ class NameForm extends React.Component<User, User>
   }
 
   render() {
-    let errorMessages = []
+    let errorMessages = [];
     if (this.state.emailValid === false) {
       errorMessages.push(<div className="margin-bottom" key={0}>EMAIL ERROR</div>);
     }
@@ -132,7 +133,7 @@ class NameForm extends React.Component<User, User>
             />
             <div
               className="margin-bottom button"
-              onClick={() => this.handleSumbit()}
+              onClick={() => this.checkFormValidityAndSubmit()}
             >
               Sign Up
             </div>
