@@ -1,3 +1,4 @@
+import { response } from "express";
 import { userInfo } from "os";
 import React from "react";
 import {
@@ -58,6 +59,17 @@ class NameForm extends React.Component<
     });
   }
 
+  handleSumbit() {
+      // Simple POST request with a JSON body using fetch
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.state)
+      };
+      fetch('http://192.168.1.101:5000', requestOptions)
+          .then((response) => console.log(response.json()))
+  }
+
   handlePasswordChange(event: any) {
     this.setState({password: event.target.value});
   }
@@ -82,6 +94,10 @@ class NameForm extends React.Component<
               value={this.state.password}
               onChange={this.handlePasswordChange}
             />
+
+            <button onClick={() => this.handleSumbit()}>
+              Click me
+            </button>
 
           <span className="title margin-bottom">
             Input data
