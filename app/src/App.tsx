@@ -1,5 +1,5 @@
 import { response } from "express";
-import { userInfo } from "os";
+import { UserInfo, userInfo } from "os";
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -84,15 +84,26 @@ class NameForm extends React.Component<User, User>
       this.state.emailValid &&
       this.state.passwordValid
     ) {
-      // Simple POST request with a JSON body using fetch
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.state)
-      };
-      fetch('http://192.168.1.105:5001', requestOptions)
-          .then((response) => console.log(response.json()));
+      this.createUserAttempt(this.state);
     }
+  }
+
+  createUserAttempt(state: User) {
+    const createUserAttempt = {
+      "email": state.email,
+      "password": state.password,
+    }
+
+    // Simple POST request with a JSON body using fetch
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(createUserAttempt)
+    };
+    fetch('http://192.168.1.105:5001', requestOptions)
+      .then((response) => console.log(response.json()));
+
+
   }
 
   handlePasswordChange(event: any) {
