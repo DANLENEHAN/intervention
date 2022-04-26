@@ -92,6 +92,7 @@ class NameForm extends React.Component<User, User>
     const createUserAttempt = {
       "email": state.email,
       "password": state.password,
+      "username": "user".concat(state.email.split("@")[0]),
     }
 
     // Simple POST request with a JSON body using fetch
@@ -101,9 +102,13 @@ class NameForm extends React.Component<User, User>
       body: JSON.stringify(createUserAttempt)
     };
     fetch('http://127.0.0.1:5000/create_account', requestOptions)
-      .then((response) => console.log(response.json()));
-
-
+      .then(response => response.json())
+      .then(result => {
+        console.log('Success:', result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
   handlePasswordChange(event: any) {
